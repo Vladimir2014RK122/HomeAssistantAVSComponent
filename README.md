@@ -313,6 +313,7 @@ Next three parameters unlock auxiliary heat controls, but parameters have to use
 
 
 <br>
+
 **Optional parameters:**
 
 > **name** : *string*<br>
