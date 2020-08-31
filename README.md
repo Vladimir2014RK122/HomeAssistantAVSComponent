@@ -49,6 +49,7 @@ After previos step (setup platform) you can add entities:
 > *example:* `address: '12345'`
 
 <br>
+
 **Optional parameters:**
 
 > **name** : *string*<br>
@@ -157,6 +158,7 @@ Next pair of parameters unlock color temperature controls, but parameters have t
 > *example:* `setpoint_temperature_status: '7'` 
 
 <br>
+
 **Optional parameters:**
 
 > **name** : *string*<br>
