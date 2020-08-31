@@ -156,7 +156,7 @@ def readInputData(hass, sockRead):
         # print("get_Host_name_IP() = " + str(get_Host_name_IP()) + " type: " + str(type(get_Host_name_IP())))
         # print("address[0] = " + str(address[0]) + " type: " + str(type(address[0])))
 
-        if get_Host_name_IP() != address[0]:
+        if get_ip() != address[0]:
             # _LOGGER.warning(' AVS receive Data from:' + str(address[0]) + ': ' + inputTelegram.teltoStr())
             #print(' AVS receive Data from:' + str(address[0]) + ': ' + inputTelegram.teltoStr())
         
@@ -164,16 +164,17 @@ def readInputData(hass, sockRead):
                 {"address": inputTelegram.getTelAddress(), "data_type": inputTelegram.getDataType(), "source": inputTelegram.getSrcAddress(),"data": inputTelegram.getData()},)
     
 
-def get_Host_name_IP(): 
-    try: 
-        host_name = socket.gethostname() 
-        host_ip = socket.gethostbyname(host_name) 
-        # print("Hostname :  ",host_name) 
-        # print("IP : ",host_ip) 
-        return host_ip
-    except: 
-    #     print("Unable to get Hostname and IP") 
-        _LOGGER.error('Unable to get Hostname and IP')
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
     
 
