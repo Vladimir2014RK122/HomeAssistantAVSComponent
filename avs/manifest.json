@@ -1,0 +1,7 @@
+{
+    "domain": "avs",
+    "name": "AVS",
+    "documentation": "",
+    "requirements": ["crcmod", "numpy"],
+    "codeowners": ["@Florence76"]
+  }

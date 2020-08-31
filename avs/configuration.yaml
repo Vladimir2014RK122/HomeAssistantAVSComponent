@@ -1,0 +1,108 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+# scene: !include scenes.yaml
+
+
+
+
+avs:
+  mcast_group: '239.1.1.11'
+  ha_avs_address: '12345'
+
+climate:
+  - platform: avs
+    name: TemperatureIn Kitchen
+    # on_off: '3'
+    # on_off_status: '8'
+    measured_temperature_status: '5'
+    setpoint_temperature: '2'
+    setpoint_temperature_status: '7'
+    operation_mode: '1'
+    operation_mode_status: '6'
+    heat_value_status: '11'
+    cool_value_status: '12'
+    heat_cool_status: '13'
+    error_status: '14'
+    setpoint_step: 1.0
+    
+    setpoint_max_temp: 50.0
+    setpoint_min_temp: 7.0
+    # use_humidity: True
+    use_aux_heat: True
+    # measured_humidity_status: '2'
+    # setpoint_humidity: '7'
+    # setpoint_humidity_status: '2'
+    aux_heat: '3'
+    aux_heat_status: '8'
+
+    poll : True
+    scan_interval: 30
+
+
+
+light:
+  - platform: avs
+    name: Switch
+    address: '48'
+    state_address: '49'
+
+  - platform: avs
+    name: Dimmer
+    address: '43'
+    state_address: '47'
+
+    brightness_address: '40'
+    brightness_state_address: '45'
+
+  - platform: avs
+    name: RGBW
+    address: '18'
+    state_address: '5'
+
+    color_address: '14'
+    color_state_address: '4'
+
+    white_address: '22'
+    white_state_address: '9'
+
+  - platform: avs
+    name: LEDTemp
+    address: '50'
+    state_address: '58'
+
+    color_temperature_address: '25'
+    color_temperature_state_address: '60'
+
+    brightness_address: '54'
+    brightness_state_address: '62'
+    
+
+sensor:
+  - platform: avs
+    name: 'living sensor Temp'
+    state_address: '64'
+    type: 'temperature'
+    units: "˚C"
+  - platform: avs
+    name: 'living sensor setpoint'
+    state_address: '65'
+    type: 'temperature'
+    units: "˚C"
+
+
+
+
+
