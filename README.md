@@ -165,6 +165,11 @@ Next pair of parameters unlock color temperature controls, but parameters have t
 > entity name<br>
 > *example:* `name: Living sconce`
 
+> **thermostat\_mode** : *string*<br>
+> mode of thermostat<br>
+> *range:* heat/cool/heat_cool<br>
+> *example:* `thermostat_mode: 'heat_cool'`  
+
 > **on\_off** : *string*<br>
 > on/off thermostat<br>
 > *avs-bus type:* type-1 (1 bit)<br>

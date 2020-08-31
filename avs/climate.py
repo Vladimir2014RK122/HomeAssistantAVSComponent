@@ -39,6 +39,7 @@ AVS_DPT11
 )
 
 CONF_NAME = "name"
+CONF_THERMOSTAT_MODE = "thermostat_mode"
 CONF_ON_OFF_ADDRESS = "on_off"
 CONF_ON_OFF_STATUS_ADDRESS = "on_off_status"
 CONF_MEASURED_TEMPERATURE_STATUS_ADDRESS = "measured_temperature_status"
@@ -64,6 +65,10 @@ CONF_POLL = "poll"
 
 
 
+DEFAULT_NAME = "AVS Climate"
+DEFAULT_THERMOSTAT_MODE_HEAT = "heat"
+DEFAULT_THERMOSTAT_MODE_COOL = "cool"
+DEFAULT_THERMOSTAT_MODE_HEAT_COOL = "heat_and_cool"
 DEFAULT_NAME = "AVS Climate"
 DEFAULT_SETPOINT_STEP = 0.5
 DEFAULT_MAX_TEMP = 55
@@ -93,6 +98,7 @@ PRESET_MODES = {
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+        vol.Optional(CONF_THERMOSTAT_MODE, default=DEFAULT_THERMOSTAT_MODE_HEAT): cv.string,
         vol.Optional(CONF_ON_OFF_ADDRESS): cv.string,
         vol.Optional(CONF_ON_OFF_STATUS_ADDRESS): cv.string,
         vol.Required(CONF_MEASURED_TEMPERATURE_STATUS_ADDRESS): cv.string,
@@ -132,7 +138,7 @@ def async_add_entities_config(hass, config, async_add_entities):
     device = {
                 "platform" : hass.data[DATA_AVS],
                 "name" : config[CONF_NAME],
-
+                "thermostat_mode" : config.get(CONF_THERMOSTAT_MODE),
                 "on_off" : config.get(CONF_ON_OFF_ADDRESS),
                 "on_off_status" : config.get(CONF_ON_OFF_STATUS_ADDRESS),
                 "measured_temperature_status" : config.get(CONF_MEASURED_TEMPERATURE_STATUS_ADDRESS),
@@ -407,8 +413,12 @@ class AVSClimate(ClimateEntity):
     @property
     def hvac_modes(self):
         """Return the list of available operation modes."""
-        
-        return [HVAC_MODE_OFF, HVAC_MODE_HEAT, HVAC_MODE_COOL]
+        if self.device['thermostat_mode'] == DEFAULT_THERMOSTAT_MODE_HEAT:
+            return [HVAC_MODE_OFF, HVAC_MODE_HEAT]
+        if self.device['thermostat_mode'] == DEFAULT_THERMOSTAT_MODE_COOL:
+            return [HVAC_MODE_OFF, HVAC_MODE_COOL]
+        if self.device['thermostat_mode'] == DEFAULT_THERMOSTAT_MODE_HEAT_COOL:
+            return [HVAC_MODE_OFF, HVAC_MODE_HEAT, HVAC_MODE_COOL]
 
     @property
     def preset_mode(self):
