@@ -70,7 +70,7 @@ DEFAULT_THERMOSTAT_MODE_HEAT = "heat"
 DEFAULT_THERMOSTAT_MODE_COOL = "cool"
 DEFAULT_THERMOSTAT_MODE_HEAT_COOL = "heat_and_cool"
 DEFAULT_NAME = "AVS Climate"
-DEFAULT_SETPOINT_STEP = 0.5
+DEFAULT_SETPOINT_STEP = 1.0
 DEFAULT_MAX_TEMP = 55
 DEFAULT_MIN_TEMP = 7
 DEFAULT_POLL_PERIOD = 60
@@ -108,7 +108,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_OPERATION_MODE_STATUS_ADDRESS): cv.string,
         vol.Optional(CONF_HEAT_VALUE_STATUS_ADDRESS): cv.string,
         vol.Optional(CONF_COOL_VALUE_STATUS_ADDRESS): cv.string,
-        vol.Optional(CONF_HEAT_COOL_STATUS_ADDRESS): cv.string,
+        vol.Required(CONF_HEAT_COOL_STATUS_ADDRESS): cv.string,
         vol.Optional(CONF_ERROR_STATUS_ADDRESS): cv.string,
 
         vol.Optional(CONF_SETPOINT_STEP, default=DEFAULT_SETPOINT_STEP): vol.All(float, vol.Range(min=0, max=2)),
@@ -333,11 +333,12 @@ class AVSClimate(ClimateEntity):
     def supported_features(self):
         """Return the list of supported features."""
         #   print("SUPPORT_TARGET_TEMPERATURE = " + str(SUPPORT_TARGET_TEMPERATURE))
-        result = SUPPORT_TARGET_TEMPERATURE | SUPPORT_PRESET_MODE
-
-        if self.device['use_humidity'] != None:
+        result = SUPPORT_TARGET_TEMPERATURE
+        if self.device['operation_mode'] != None and self.device['operation_mode_status'] != None:
+            result |= SUPPORT_PRESET_MODE
+        if self.device['use_humidity'] == True and self.device['setpoint_humidity'] != None and self.device['setpoint_humidity_status'] != None:
             result |= SUPPORT_TARGET_HUMIDITY
-        if self.device['use_aux_heat'] != None:
+        if self.device['use_aux_heat'] == True and self.device['aux_heat'] != None and self.device['aux_heat_status'] != None:
             result |= SUPPORT_AUX_HEAT
         return result
 
@@ -370,7 +371,9 @@ class AVSClimate(ClimateEntity):
     def current_temperature(self):
         """Return the current temperature."""
         # print("current_temperature(self)")  
+
         return self._measured_temperature
+
 
     @property
     def target_temperature_step(self):
@@ -413,6 +416,9 @@ class AVSClimate(ClimateEntity):
     @property
     def hvac_modes(self):
         """Return the list of available operation modes."""
+        if self.device['heat_cool_status'] == None:
+            return None
+
         if self.device['thermostat_mode'] == DEFAULT_THERMOSTAT_MODE_HEAT:
             return [HVAC_MODE_OFF, HVAC_MODE_HEAT]
         if self.device['thermostat_mode'] == DEFAULT_THERMOSTAT_MODE_COOL:
@@ -439,6 +445,12 @@ class AVSClimate(ClimateEntity):
         """Return a list of available preset modes.
         Requires SUPPORT_PRESET_MODE.
         """
+        # print(str(self.device['operation_mode']) + "   " + str(self.device['operation_mode_status']))
+        # if self.device['operation_mode'] != None and self.device['operation_mode_status'] != None:
+        #     return [PRESET_SLEEP, PRESET_AWAY, PRESET_COMFORT]
+        # else:
+        #     return None
+
         return [PRESET_SLEEP, PRESET_AWAY, PRESET_COMFORT]
 
 

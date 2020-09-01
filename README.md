@@ -157,6 +157,13 @@ Next pair of parameters unlock color temperature controls, but parameters have t
 > *range:* -100.0 ... 100.0<br>
 > *example:* `setpoint_temperature_status: '7'` 
 
+> **heat\_cool\_status** : *string*<br>
+> show instance heat or cool status. 0 - all off, 1 - heating, 2 - cooling<br>
+> *avs-bus type:* type-2 (2 byte)<br>
+> *range:* 0/1/2<br>
+> *example:* `heat_cool_status: '13'` 
+
+
 <br>
 
 **Optional parameters:**
@@ -206,11 +213,6 @@ Next pair of parameters unlock color temperature controls, but parameters have t
 > *range:* 0...255<br>
 > *example:* `cool_value_status: '12'`  
 
-> **heat\_cool\_status** : *string*<br>
-> show instance heat or cool status. 0 - all off, 1 - heating, 2 - cooling<br>
-> *avs-bus type:* type-2 (2 byte)<br>
-> *range:* 0/1/2<br>
-> *example:* `heat_cool_status: '13'` 
 
 > **error\_status** : *string*<br>
 > showing thermostat got to error state(usialy for 1-wire sensor)<br>

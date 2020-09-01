@@ -125,7 +125,7 @@ class AVSModule:
             if events:
                 for key, event in events:
                     callback = key.data
-                    callback(hass, key.fileobj)
+                    callback(hass, key.fileobj, self.ha_bus_address)
             else:
                 await asyncio.sleep(0)
            
@@ -147,7 +147,7 @@ class AVSModule:
             await asyncio.sleep(0.1)
 
 
-def readInputData(hass, sockRead):
+def readInputData(hass, sockRead, ha_bus_address):
     message, address = sockRead.recvfrom(4096)
     inputTelegram = Telegram()
     if inputTelegram.initWithByteView(message) == True :
@@ -156,9 +156,9 @@ def readInputData(hass, sockRead):
         # print("get_Host_name_IP() = " + str(get_Host_name_IP()) + " type: " + str(type(get_Host_name_IP())))
         # print("address[0] = " + str(address[0]) + " type: " + str(type(address[0])))
 
-        if get_ip() != address[0]:
+        if get_ip() != address[0] and str(inputTelegram.getSrcAddress()) != str(ha_bus_address):
             # _LOGGER.warning(' AVS receive Data from:' + str(address[0]) + ': ' + inputTelegram.teltoStr())
-            #print(' AVS receive Data from:' + str(address[0]) + ': ' + inputTelegram.teltoStr())
+            # print(' AVS receive Data from:' + str(inputTelegram.getSrcAddress()) + ': ' + str(ha_bus_address))
         
             hass.bus.async_fire("avs_bus_event/" + str(inputTelegram.getTelAddress()),
                 {"address": inputTelegram.getTelAddress(), "data_type": inputTelegram.getDataType(), "source": inputTelegram.getSrcAddress(),"data": inputTelegram.getData()},)
