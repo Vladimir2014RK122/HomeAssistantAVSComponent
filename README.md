@@ -174,7 +174,7 @@ Next pair of parameters unlock color temperature controls, but parameters have t
 
 > **thermostat\_mode** : *string*<br>
 > mode of thermostat<br>
-> *range:* heat/cool/heat_cool<br>
+> *range:* heat/cool/heat_and_cool<br>
 > *example:* `thermostat_mode: 'heat_cool'`  
 
 > **on\_off** : *string*<br>
