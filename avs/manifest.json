@@ -3,5 +3,6 @@
     "name": "AVS",
     "documentation": "",
     "requirements": ["crcmod", "numpy"],
-    "codeowners": ["@Florence76"]
+    "codeowners": ["@Florence76"],
+    "version": "0.1"
   }

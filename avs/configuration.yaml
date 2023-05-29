@@ -1,61 +1,27 @@
 
-# Configure a default setup of Home Assistant (frontend, api, etc)
+# Loads default set of integrations. Do not remove.
 default_config:
 
-# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-# http:
-#   base_url: example.duckdns.org:8123
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
 
 # Text to speech
 tts:
   - platform: google_translate
 
-group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
-# scene: !include scenes.yaml
-
-
-
+scene: !include scenes.yaml
 
 avs:
   mcast_group: '239.1.1.11'
   ha_avs_address: '12345'
 
-climate:
-  - platform: avs
-    name: TemperatureIn Kitchen
-    # on_off: '3'
-    # on_off_status: '8'
-    measured_temperature_status: '5'
-    setpoint_temperature: '2'
-    setpoint_temperature_status: '7'
-    operation_mode: '1'
-    operation_mode_status: '6'
-    heat_value_status: '11'
-    cool_value_status: '12'
-    heat_cool_status: '13'
-    error_status: '14'
-    setpoint_step: 1.0
-    
-    setpoint_max_temp: 50.0
-    setpoint_min_temp: 7.0
-    # use_humidity: True
-    use_aux_heat: True
-    # measured_humidity_status: '2'
-    # setpoint_humidity: '7'
-    # setpoint_humidity_status: '2'
-    aux_heat: '3'
-    aux_heat_status: '8'
-
-    poll : True
-    scan_interval: 30
-
-
 
 light:
   - platform: avs
-    name: Switch
+    name: Switch2
     address: '48'
     state_address: '49'
 
@@ -69,14 +35,23 @@ light:
 
   - platform: avs
     name: RGBW
-    address: '18'
-    state_address: '5'
+    address: '5'
+    state_address: '10'
 
-    color_address: '14'
-    color_state_address: '4'
+    brightness_address: '3'
+    brightness_state_address: '8'
 
-    white_address: '22'
-    white_state_address: '9'
+    # color_address: '4'
+    # color_state_address: '9'
+
+    hue_address: '1'
+    hue_state_address: '6'
+
+    saturation_address: '2'
+    saturation_state_address: '7'
+
+    white_address: '11'
+    white_state_address: '12'
 
   - platform: avs
     name: LEDTemp
@@ -88,21 +63,135 @@ light:
 
     brightness_address: '54'
     brightness_state_address: '62'
-    
+
+climate:
+  - platform: avs
+    name: Thermostat 1
+    # on_off: '13'
+    # on_off_status: '17'
+    thermostat_mode: 'heat_and_cool'
+    measured_temperature_status: '16'
+    setpoint_temperature: '14'
+    setpoint_temperature_status: '18'
+    operation_mode: '15'
+    operation_mode_status: '19'
+    heat_cool_status: '20'
+
+    # setpoint_min: 7.0
+    # setpoint_max: 30.0
 
 sensor:
   - platform: avs
-    name: 'living sensor Temp'
-    state_address: '64'
-    type: 'temperature'
-    units: "˚C"
+    name: ssensor 1
+    state_address: '33'
+    dpt: '6'
+    units: 'единиц жаркости'
+    type: "ozone"
+
+
+button:
   - platform: avs
-    name: 'living sensor setpoint'
-    state_address: '65'
-    type: 'temperature'
-    units: "˚C"
+    name: scene_1
+    address: '15'
+    dpt: '1'
+    data: '121'
+
+  - platform: avs
+    name: scene_2
+    address: '16'
+    dpt: '2'
+    data: '215'
+
+  - platform: avs
+    name: scene_3
+    address: '17'
+    dpt: '3'
+    data: '215'
+
+  - platform: avs
+    name: scene_4
+    address: '18'
+    dpt: '4'
+    data: '215'
+
+  - platform: avs
+    name: scene_5
+    address: '19'
+    dpt: '5'
+    data: '215'
+
+  - platform: avs
+    name: comfort_t
+    address: '25'
+    dpt: '6'
+    data: '32.5'
+  - platform: avs
+    name: cstandby_t
+    address: '25'
+    dpt: '6'
+    # data: '12.8'
+
+switch:
+  - platform: avs
+    name: switch_1
+    address: '54'
+    state_address: '55'
+    dpt: 1
+    data_0: '0'
+    data_1: '1'
+
+  - platform: avs
+    name: switch_2
+    address: '54'
+    state_address: '55'
+    dpt: 2
+    data_0: '150'
+    data_1: '240'
+
+  - platform: avs
+    name: switch_3
+    address: '54'
+    state_address: '55'
+    dpt: 3
+    data_0: '-103'
+    data_1: '69'
+
+  - platform: avs
+    name: switch_5
+    address: '54'
+    state_address: '55'
+    dpt: 5
+    data_0: '234'
+    data_1: '65433'
+
+  - platform: avs
+    name: switch_6
+    address: '54'
+    state_address: '55'
+    dpt: 6
+    data_0: '-15.9'
+    data_1: '64.78'
+
+  - platform: avs
+    name: switch_10
+    address: '54'
+    state_address: '55'
+    dpt: 10
+    data_0: '12356'
+    data_1: '123456789'
+
+  - platform: avs
+    name: switch_11
+    address: '54'
+    state_address: '55'
+    dpt: 11
+    data_0: '-123456'
+    data_1: '789456'
 
 
 
-
+logger:
+  default: info
+  logs:
+    homeassistant.components.cloud: debug
 
